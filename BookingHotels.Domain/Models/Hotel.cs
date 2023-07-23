@@ -14,8 +14,8 @@ namespace BookingHotels.Domain.Models
         public string Address { get; set; }
         public string City { get; set; }
         public string Country { get; set; }
-       // public string Phone { get; set; }
-       // public List<Room> Rooms { get; set; }
+        public string Phone { get; set; }
+        public List<Room> Rooms { get; set; }
         public string Description { get; set; }
     }
 }
