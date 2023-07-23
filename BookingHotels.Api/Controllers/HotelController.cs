@@ -8,15 +8,16 @@ namespace BookingHotels.Api.Controllers
     [ApiController]
     public class HotelController : ControllerBase
     {
-        public HotelController()
+        private readonly DataSource _dataSource;
+        public HotelController(DataSource dataSource)
         {
-
+            _dataSource = dataSource;
         }
 
         [HttpGet]
         public IActionResult GetAllHotels()
         {
-            var hotels = GetHotels();
+            var hotels = _dataSource;
             return Ok(hotels);
         }
 
@@ -24,7 +25,7 @@ namespace BookingHotels.Api.Controllers
         [Route("{id}")]
         public IActionResult GetHotelById(int id)
         {
-            var hotels = GetHotels();
+            var hotels = _dataSource.Hotels;
             var hotel = hotels.FirstOrDefault(h => h.HotelId == id);
             if (hotel == null)
             {
@@ -36,7 +37,7 @@ namespace BookingHotels.Api.Controllers
         [HttpPost]
         public IActionResult CreateHotel([FromBody] Hotel hotel)
         {
-            var hotels = GetHotels();
+            var hotels = _dataSource.Hotels;
             hotels.Add(hotel);
             return Created("", hotel);
         }
@@ -45,7 +46,7 @@ namespace BookingHotels.Api.Controllers
         [HttpPut]
         public IActionResult UpdateHotel([FromBody] Hotel updatedHotel, int id)
         {
-            var hotels = GetHotels();
+            var hotels = _dataSource.Hotels;
             var oldHotel = hotels.FirstOrDefault(h => h.HotelId == id);
             hotels.Remove(oldHotel);
             hotels.Add(updatedHotel);
@@ -56,34 +57,11 @@ namespace BookingHotels.Api.Controllers
         [HttpDelete]
         public IActionResult DeleteHotelById(int id)
         {
-            var hotels = GetHotels();
+            var hotels = _dataSource.Hotels;
             var hotelToDelete = hotels.FirstOrDefault(h => h.HotelId == id);
-            if (hotelToDelete == null)  return NotFound();
+            if (hotelToDelete == null) return NotFound();
             hotels.Remove(hotelToDelete);
             return NoContent();
-        }
-
-        private List<Hotel> GetHotels() // just for test before getting started with the database
-        {
-            return new List<Hotel>
-            {
-                new Hotel
-                {
-                    HotelId= 1,
-                    Name="Sabri",
-                    Stars = 4,
-                    Country= "Algeria",
-                    City="Annaba"
-                },
-                new Hotel
-                {
-                    HotelId= 2,
-                    Name="Sheraton",
-                    Stars=5,
-                    Country="Algeria",
-                    City="Annaba"
-                }
-            };
         }
     }
 }
