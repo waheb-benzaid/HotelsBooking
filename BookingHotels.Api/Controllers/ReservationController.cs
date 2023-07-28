@@ -7,5 +7,6 @@ namespace BookingHotels.Api.Controllers
     [ApiController]
     public class ReservationController : ControllerBase
     {
+        
     }
 }

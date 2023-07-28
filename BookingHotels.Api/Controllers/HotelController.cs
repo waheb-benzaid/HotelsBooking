@@ -1,6 +1,7 @@
 ﻿using BookingHotels.Domain.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace BookingHotels.Api.Controllers
 {
@@ -8,37 +9,30 @@ namespace BookingHotels.Api.Controllers
     [ApiController]
     public class HotelController : ControllerBase
     {
-        private readonly DataSource _dataSource;
-        public HotelController(DataSource dataSource)
+        private readonly ILogger<HotelController> _logger;
+
+        public HotelController( ILogger<HotelController> logger)
         {
-            _dataSource = dataSource;
+            _logger = logger;
         }
 
         [HttpGet]
         public IActionResult GetAllHotels()
         {
-            var hotels = _dataSource;
-            return Ok(hotels);
+            return Ok();
         }
 
         [HttpGet]
         [Route("{id}")]
         public IActionResult GetHotelById(int id)
         {
-            var hotels = _dataSource.Hotels;
-            var hotel = hotels.FirstOrDefault(h => h.HotelId == id);
-            if (hotel == null)
-            {
-                return NotFound();
-            }
-            return Ok(hotel);
+           
+            return Ok();
         }
 
         [HttpPost]
         public IActionResult CreateHotel([FromBody] Hotel hotel)
         {
-            var hotels = _dataSource.Hotels;
-            hotels.Add(hotel);
             return Created("", hotel);
         }
 
@@ -46,10 +40,6 @@ namespace BookingHotels.Api.Controllers
         [HttpPut]
         public IActionResult UpdateHotel([FromBody] Hotel updatedHotel, int id)
         {
-            var hotels = _dataSource.Hotels;
-            var oldHotel = hotels.FirstOrDefault(h => h.HotelId == id);
-            hotels.Remove(oldHotel);
-            hotels.Add(updatedHotel);
             return NoContent();
         }
 
@@ -57,10 +47,6 @@ namespace BookingHotels.Api.Controllers
         [HttpDelete]
         public IActionResult DeleteHotelById(int id)
         {
-            var hotels = _dataSource.Hotels;
-            var hotelToDelete = hotels.FirstOrDefault(h => h.HotelId == id);
-            if (hotelToDelete == null) return NotFound();
-            hotels.Remove(hotelToDelete);
             return NoContent();
         }
     }
