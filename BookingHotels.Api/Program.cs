@@ -1,4 +1,6 @@
 using BookingHotels.Api;
+using BookingHotels.Dal;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +12,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<DataSource>();
 
+var constr = builder.Configuration.GetConnectionString("Default");
+builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(constr));
 
 var app = builder.Build();
 
